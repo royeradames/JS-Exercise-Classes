@@ -41,8 +41,37 @@ class Airplane {
 */
 
 class Person {
+  constructor(name, age){
+    this.name = name;
+    this.age = age;
+    this.stomach = [];
+  }
+eat(someFood){
+  // simplify if statement condition
+  const noEffectIfMoreThan10 = (this.stomach.length < 10) && (this.stomach.length > -1);
 
+  if (noEffectIfMoreThan10){
+    
+    this.stomach.push(someFood);
+  }
 }
+
+poop(){
+  this.stomach = [];
+}
+}
+
+toString(){
+  return `${this.name}, ${this.age}`
+}
+
+//initialize instance
+const royer = new Person("royer", 25);
+
+//print out
+console.log(royer)
+
+
 
 /*
   TASK 2
@@ -59,7 +88,45 @@ class Person {
 */
 
 class Car {
+  constructor(model, milesPerGallon){
+    this.model = model;
+    this.milesPerGallon = milesPerGallon;
+    this.tank = 0;
+    this.odometer = 0;
+  }
 
+  fill(gallons){
+    this.tank += gallons;
+  }
+
+  drive(distance, milesPerGallon){
+      
+    
+    //updating drived miles 
+    const tankGoesNegDoesNotHappen = !(this.tank - (distance/milesPerGallon));
+    const tankGoesNeg = (this.tank - (distance/milesPerGallon));
+
+    if(tankGoesNegDoesNotHappen){
+      //take away from tank counter to adjusted
+      this.tank -= (distance/milesPerGallon);
+      this.odometer += distance;
+    } else if(tankGoesNeg){
+      const counterFixer = Math.abs(distance/milesPerGallon);
+      const counterBreaker = distance/milesPerGallon
+      const counterFix = counterFixer + counterBreaker;
+      this.tank += counterFix;
+
+      this.odometer -= counterBreaker;
+    }
+    //what to do if miles drived are more than you have gas to move
+
+
+    //if out of gas
+    if (this.tank <= 0 ){
+      return `I ran out of fuel at ${this.odometer} miles!`
+    }
+  
+  }
 }
 
 /*
