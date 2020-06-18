@@ -51,20 +51,20 @@ eat(someFood){
   const noEffectIfMoreThan10 = (this.stomach.length < 10) && (this.stomach.length > -1);
 
   if (noEffectIfMoreThan10){
-    
-    this.stomach.push(someFood);
+      
+      this.stomach.push(someFood);
+    }
+  }
+
+  poop(){
+    this.stomach = [];
+  }
+
+
+  toString(){
+    return `${this.name}, ${this.age}`
   }
 }
-
-poop(){
-  this.stomach = [];
-}
-}
-
-toString(){
-  return `${this.name}, ${this.age}`
-}
-
 //initialize instance
 const royer = new Person("royer", 25);
 
@@ -99,28 +99,27 @@ class Car {
     this.tank += gallons;
   }
 
-  drive(distance, milesPerGallon){
+  drive(distance){
       
     
     //updating drived miles 
-    const tankGoesNegDoesNotHappen = !(this.tank - (distance/milesPerGallon));
-    const tankGoesNeg = (this.tank - (distance/milesPerGallon));
+    const tankGoesNegDoesNotHappen = !(this.tank - (distance/this.milesPerGallon));
+    const tankGoesNeg = (this.tank - (distance/this.milesPerGallon));
 
     if(tankGoesNegDoesNotHappen){
       //take away from tank counter to adjusted
-      this.tank -= (distance/milesPerGallon);
+      this.tank -= (distance/this.milesPerGallon);
       this.odometer += distance;
     } else if(tankGoesNeg){
-      const counterFixer = Math.abs(distance/milesPerGallon);
-      const counterBreaker = distance/milesPerGallon
+      //what to do if miles drived are more than you have gas to move
+      const counterFixer = Math.abs(distance/this.milesPerGallon);
+      const counterBreaker = distance/this.milesPerGallon
       const counterFix = counterFixer + counterBreaker;
       this.tank += counterFix;
 
       this.odometer -= counterBreaker;
     }
-    //what to do if miles drived are more than you have gas to move
-
-
+    
     //if out of gas
     if (this.tank <= 0 ){
       return `I ran out of fuel at ${this.odometer} miles!`
@@ -128,6 +127,14 @@ class Car {
   
   }
 }
+
+//initialize instance
+const royerCar = new Car("Toyota", 20)
+
+//print out
+console.log(royerCar);
+
+
 
 /*
   TASK 3
@@ -142,8 +149,24 @@ class Car {
         + {name} and {location} of course come from the instance's own properties.
 */
 class Lambdasian {
+  constructor(object){
+    this.name = object.name;
+    this.age = object.age;
+    this.location = object.location;
+    
+  }
 
+  speak(){
+    return `Hello my name is ${this.name}, I am from ${this.location}`
+  }
 }
+
+//initialize
+const royerWeb33 = new Lambdasian({name: "Royer", age: 25, location: "orlando"});
+
+//print out
+console.log(royerWeb33)
+console.log(royerWeb33.speak())
 
 /*
   TASK 4
@@ -159,9 +182,39 @@ class Lambdasian {
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
+class Instructor extends Lambdasian{
+  constructor(object){
+    super(object);
+    this.specialty = object.specialty;
+    this.favLanguage = object.favLanguage;
+    this.catchPhrase = object.catchPhrase;
+  }
 
+  demo(subject){
+    return `Today we are learning about ${subject}.`;
+  }
+
+  grade(student,subject){
+    return `${student.name} receives a perfect score on ${subject}.`;
+  }
 }
+
+//initialize
+const royerInstructor = new Instructor({
+  name: "Royer",
+  age: 26,
+  location: "Orlando",
+  speciality: "redux",
+  favLanguage: "JavaScript",
+  catchPhrase: "Don't forget the homies"
+})
+
+//print out
+console.log(royerInstructor)
+console.log(royerInstructor.demo("redux"))
+console.log(royerInstructor.grade({name:"Gabriel"}, "redux"))
+
+
 
 /*
   TASK 5
@@ -178,9 +231,45 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
+class Student extends Lambdasian {
+  constructor(object){
+    super(object);
+    this.previousBackground = object.previousBackground;
+    this.className = object.className;
+    this.favSubjects = object.favSubjects;
 
+  }
+
+  listSubjects(){
+    return `Loving ${this.favSubjects} `
+  }
+
+  prAssignment(){
+    return `${this.name} has submitted a PR for ${this.favSubjects[2]}`
+  }
+
+  sprintChallenge(){
+    return `${this.name} has begun sprint challenge on ${this.favSubjects[2]}`;
+  }
 }
+
+//initialize
+const gabrielTheStudent = new Student({
+  name: "Gabriel",
+  age: 16,
+  location: "Orlando",
+  speciality: "Web development",
+  favLanguage: "Python",
+  catchPhrase: "Don't forget the homies",
+  previousBackground: 'High school',
+  className: "CS132",
+  favSubjects: ['HTML', 'CSS', 'JS'],
+})
+//print out
+console.log(gabrielTheStudent)
+console.log(gabrielTheStudent.listSubjects())
+console.log(gabrielTheStudent.prAssignment())
+console.log(gabrielTheStudent.sprintChallenge())
 
 /*
   TASK 6
@@ -195,10 +284,39 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
+class ProjectManager extends Instructor{
+  constructor(object){
+    super(object);
+    this.gradClassName = object.gradClassName;
+    this.favInstructor = object.favInstructor;
+  }
+  standUp(channel){
+  return `${this.name} announces to ${channel}, @channel standy times!`;
+  }
 
+  debugsCode(student, subject){
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
+  }
 }
 
+//initialize
+const johnProjectManager = new ProjectManager({
+  name: "John",
+  age: 35,
+  location: "Orlando",
+  speciality: "Web development",
+  favLanguage: "Python",
+  catchPhrase: "wubba lubba dub dub",
+  previousBackground: 'Senior proffesor for the Central University of Florida',
+  className: "CS132",
+  favSubjects: ['Upcoming coding features', 'Future technologies', 'JS'],
+  gradClassName: "CS1",
+  favInstructor: "Sean",
+})
+//print out
+console.log(johnProjectManager)
+console.log(johnProjectManager.standUp('#orlando'))
+console.log(johnProjectManager.debugsCode({name: "Emmanuel"}, "writing functions"))
 /*
   STRETCH PROBLEM (no tests!)
     - Extend the functionality of the Student by adding a prop called grade and setting it equal to a number between 1-100.
